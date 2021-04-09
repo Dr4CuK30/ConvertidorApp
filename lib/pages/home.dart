@@ -24,16 +24,18 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          title: Text('ConvertidorApp'),
-          centerTitle: true,
-        ),
-        body: BotonesPiolas());
+      appBar: AppBar(
+        title: Text('ConvertidorApp'),
+        centerTitle: true,
+      ),
+      body: BotonesPiolas(),
+    );
   }
 
   Widget BotonesPiolas() {
     return Stack(children: [
-      Column(
+      SingleChildScrollView(
+          child: Column(
         children: [
           Padding(
             padding: const EdgeInsets.all(15.0),
@@ -101,7 +103,7 @@ class _HomePageState extends State<HomePage> {
             style: TextStyle(color: Colors.red, fontSize: 18),
           )
         ],
-      ),
+      )),
       Align(
         alignment: Alignment.bottomCenter,
         child: MaterialButton(
@@ -112,10 +114,11 @@ class _HomePageState extends State<HomePage> {
             setState(() {
               if (_controller.text == '') {
                 mensaje = 'Por favor, ingrese un número';
-              } else if(option2==null){
+              } else if (option2 == null) {
                 mensaje = 'Por favor, seleccione una base a convertir';
-              }else{
-                if (verificar(deTipo: option1,value: _controller.text.toUpperCase())) {
+              } else {
+                if (verificar(
+                    deTipo: option1, value: _controller.text.toUpperCase())) {
                   result = ConvertirBase(
                           deTipo: option1,
                           aTipo: option2,
