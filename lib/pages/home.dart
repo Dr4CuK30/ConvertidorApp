@@ -22,14 +22,95 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      child: Scaffold(
+    return Scaffold(
         appBar: AppBar(
           title: Text('ConvertidorApp'),
           centerTitle: true,
         ),
-        body: BotonesPiolas(),
-        floatingActionButton: FloatingActionButton(
+        body: BotonesPiolas());
+  }
+
+  Widget BotonesPiolas() {
+    return Stack(children: [
+      Column(
+        children: [
+          Padding(
+            padding: const EdgeInsets.all(15.0),
+            child: Text(
+              'Seleccione la base inicial y la base a la que quiera convertir el número, luego inserte el número y oprima el botón de convertir',
+              style: TextStyle(fontSize: 18),
+            ),
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              Padding(padding: EdgeInsets.all(10)),
+              Text('Base actual: ', style: TextStyle(fontSize: 18)),
+              DropdownButton<String>(
+                value: option1,
+                items: GenerarListaOpciones(),
+                onChanged: (value) {
+                  option1 = value;
+                  if (option1 == option2) {
+                    option2 = null;
+                  }
+                  setState(() {});
+                },
+              ),
+            ],
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              Padding(padding: EdgeInsets.all(10)),
+              Text('Base a convertir: ', style: TextStyle(fontSize: 18)),
+              DropdownButton<String>(
+                value: option2,
+                items: GenerarListaOpciones2(option1),
+                onChanged: (value) {
+                  option2 = value;
+                  setState(() {});
+                },
+              ),
+            ],
+          ),
+          Container(
+            padding: EdgeInsets.all(15),
+            child: TextField(
+              controller: _controller,
+              decoration: InputDecoration(
+                  labelText: 'Valor a convertir',
+                  labelStyle: TextStyle(fontSize: 18),
+                  border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(10))),
+            ),
+          ),
+          Container(
+            padding: EdgeInsets.all(15),
+            margin: EdgeInsets.fromLTRB(15, 0, 15, 5),
+            decoration: BoxDecoration(
+                border: Border.all(color: Colors.blue),
+                borderRadius: BorderRadius.circular(10)),
+            child: Text("Valor obtenido: $result",
+                style: TextStyle(color: Colors.blue, fontSize: 18)),
+            width: MediaQuery.of(context).size.width,
+            // child: TextField(
+            //   decoration: InputDecoration(
+            //       labelText: 'Valor obtenido: $result',
+            //       labelStyle: TextStyle(fontSize: 18),
+            //       border: OutlineInputBorder(
+            //           borderRadius: BorderRadius.circular(10))),
+            //   enabled: false,
+            // ),
+          ),
+        ],
+      ),
+      Align(
+        alignment: Alignment.bottomCenter,
+        child: MaterialButton(
+          minWidth: MediaQuery.of(context).size.width,
+          color: Colors.blue,
+          height: 80.0,
           onPressed: () {
             setState(() {
               result = ConvertirBase(
@@ -37,39 +118,10 @@ class _HomePageState extends State<HomePage> {
                   .toUpperCase();
             });
           },
+          child: Text('Convertir',
+              style: TextStyle(color: Colors.white, fontSize: 25)),
         ),
-      ),
-    );
-  }
-
-  Widget BotonesPiolas() {
-    return Column(
-      children: [
-        DropdownButton<String>(
-          value: option1,
-          items: GenerarListaOpciones(),
-          onChanged: (value) {
-            option1 = value;
-            if (option1 == option2) {
-              option2 = null;
-            }
-            setState(() {});
-          },
-        ),
-        DropdownButton<String>(
-          value: option2,
-          items: GenerarListaOpciones2(option1),
-          onChanged: (value) {
-            option2 = value;
-            setState(() {});
-          },
-        ),
-        TextField(
-          controller: _controller,
-          decoration: InputDecoration(labelText: 'Valor a convertir'),
-        ),
-        Text(result)
-      ],
-    );
+      )
+    ]);
   }
 }
