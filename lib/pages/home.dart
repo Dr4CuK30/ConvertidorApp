@@ -18,6 +18,7 @@ class _HomePageState extends State<HomePage> {
 
   String option1 = 'Decimal';
   String option2 = 'Binario';
+  String mensaje = '';
   String result = '';
 
   @override
@@ -94,15 +95,11 @@ class _HomePageState extends State<HomePage> {
             child: Text("Valor obtenido: $result",
                 style: TextStyle(color: Colors.blue, fontSize: 18)),
             width: MediaQuery.of(context).size.width,
-            // child: TextField(
-            //   decoration: InputDecoration(
-            //       labelText: 'Valor obtenido: $result',
-            //       labelStyle: TextStyle(fontSize: 18),
-            //       border: OutlineInputBorder(
-            //           borderRadius: BorderRadius.circular(10))),
-            //   enabled: false,
-            // ),
           ),
+          Text(
+            mensaje,
+            style: TextStyle(color: Colors.red, fontSize: 18),
+          )
         ],
       ),
       Align(
@@ -113,9 +110,22 @@ class _HomePageState extends State<HomePage> {
           height: 80.0,
           onPressed: () {
             setState(() {
-              result = ConvertirBase(
-                      deTipo: option1, aTipo: option2, value: _controller.text)
-                  .toUpperCase();
+              if (_controller.text == '') {
+                mensaje = 'Por favor, ingrese un número';
+              } else if(option2==null){
+                mensaje = 'Por favor, seleccione una base a convertir';
+              }else{
+                if (verificar(deTipo: option1,value: _controller.text.toUpperCase())) {
+                  result = ConvertirBase(
+                          deTipo: option1,
+                          aTipo: option2,
+                          value: _controller.text)
+                      .toUpperCase();
+                  mensaje = '';
+                } else {
+                  mensaje = 'El número ingresado no es válido';
+                }
+              }
             });
           },
           child: Text('Convertir',
